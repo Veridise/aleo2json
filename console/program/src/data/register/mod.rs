@@ -35,16 +35,16 @@ impl<N: Network> Register<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the register, i.e. r0
-            Self::Locator(locator) => "Locator",
+            Self::Locator(_) => "Locator",
             // Prints the register access, i.e. r0.owner
-            Self::Access(locator, accesses) => "Access",
+            Self::Access(_, _) => "Access",
         };
 
         let j_value = match self {
             // Prints the register, i.e. r0
             Self::Locator(locator) => json!(locator),
             // Prints the register access, i.e. r0.owner
-            Self::Access(locator, accesses) => {
+            Self::Access(_, accesses) => {
                 let mut j_access = Vec::new();
                 for val in accesses {
                     j_access.push(val.to_json());

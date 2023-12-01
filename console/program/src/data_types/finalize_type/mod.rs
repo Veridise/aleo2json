@@ -37,9 +37,9 @@ impl<N: Network> FinalizeType<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the plaintext type, i.e. signature
-            Self::Plaintext(plaintext_type) => "Plaintext",
+            Self::Plaintext(_) => "Plaintext",
             // Prints the future type, i.e. future
-            Self::Future(locator) => "Future",
+            Self::Future(_) => "Future",
         };
 
         let j_value = match self {

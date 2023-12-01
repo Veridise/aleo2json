@@ -40,11 +40,11 @@ impl<N: Network> PlaintextType<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the literal, i.e. field
-            Self::Literal(literal) => "Literal",
+            Self::Literal(_) => "Literal",
             // Prints the struct, i.e. signature
-            Self::Struct(struct_) => "Struct",
+            Self::Struct(_) => "Struct",
             // Prints the array type, i.e. [field; 2u32]
-            Self::Array(array) => "Array",
+            Self::Array(_) => "Array",
         };
 
         let j_value = match self {

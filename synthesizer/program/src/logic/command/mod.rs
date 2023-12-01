@@ -92,17 +92,17 @@ impl<N: Network> CommandTrait<N> for Command<N> {
     /// ** Vanguard JSON serialization helper ** ///
     fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
-            Self::Instruction(instruction) => "Instruction",
-            Self::Await(await_) => "Await",
-            Self::Contains(contains) => "Contains",
-            Self::Get(get) => "Get",
-            Self::GetOrUse(get_or_use) => "GetOrUse",
-            Self::RandChaCha(rand_chacha) => "RandChaCha",
-            Self::Remove(remove) => "Remove",
-            Self::Set(set) => "Set",
-            Self::BranchEq(branch_eq) => "BranchEq",
-            Self::BranchNeq(branch_neq) => "BranchNeq",
-            Self::Position(position) => "Position",
+            Self::Instruction(_) => "Instruction",
+            Self::Await(_) => "Await",
+            Self::Contains(_) => "Contains",
+            Self::Get(_) => "Get",
+            Self::GetOrUse(_) => "GetOrUse",
+            Self::RandChaCha(_) => "RandChaCha",
+            Self::Remove(_) => "Remove",
+            Self::Set(_) => "Set",
+            Self::BranchEq(_) => "BranchEq",
+            Self::BranchNeq(_) => "BranchNeq",
+            Self::Position(_) => "Position",
         };
 
         let j_value = match self {

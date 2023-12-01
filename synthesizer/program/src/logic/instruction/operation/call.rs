@@ -37,8 +37,8 @@ pub enum CallOperator<N: Network> {
 impl<N: Network> CallOperator<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
-            CallOperator::Locator(locator) => "Locator",
-            CallOperator::Resource(resource) => "Resource",
+            CallOperator::Locator(_) => "Locator",
+            CallOperator::Resource(_) => "Resource",
         };
 
         let j_value = match self {

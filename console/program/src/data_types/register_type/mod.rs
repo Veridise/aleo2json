@@ -40,13 +40,13 @@ impl<N: Network> RegisterType<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the plaintext type, i.e. signature
-            Self::Plaintext(plaintext_type) => "Plaintext",
+            Self::Plaintext(_) => "Plaintext",
             // Prints the record name, i.e. token.record
-            Self::Record(record_name) => "Record",
+            Self::Record(_) => "Record",
             // Prints the locator, i.e. token.aleo/token.record
-            Self::ExternalRecord(locator) => "ExternalRecord",
+            Self::ExternalRecord(_) => "ExternalRecord",
             // Prints the future type, i.e. future
-            Self::Future(locator) => "Future",
+            Self::Future(_) => "Future",
         };
 
         let j_value = match self {

@@ -35,9 +35,9 @@ impl<N: Network> Access<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the access member, i.e. `.foo`
-            Self::Member(identifier) => "Member",
+            Self::Member(_) => "Member",
             // Prints the access index, i.e. `[0u32]`
-            Self::Index(index) => "Index",
+            Self::Index(_) => "Index",
         };
 
         let j_value = match self {

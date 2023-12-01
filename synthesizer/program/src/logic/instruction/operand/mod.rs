@@ -49,11 +49,11 @@ impl<N: Network> Operand<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the literal, i.e. 10field.private
-            Self::Literal(literal) => "Literal",
+            Self::Literal(_) => "Literal",
             // Prints the register, i.e. r0 or r0.owner
-            Self::Register(register) => "Register",
+            Self::Register(_) => "Register",
             // Prints the program ID, i.e. howard.aleo
-            Self::ProgramID(program_id) => "ProgramID",
+            Self::ProgramID(_) => "ProgramID",
             // Prints the identifier for the signer, i.e. self.signer
             Self::Signer => "Signer",
             // Prints the identifier for the caller, i.e. self.caller

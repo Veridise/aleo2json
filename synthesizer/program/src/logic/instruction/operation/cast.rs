@@ -68,9 +68,9 @@ impl<N: Network> CastType<N> {
         let j_vtype = match self {
             Self::GroupXCoordinate => "GroupXCoordinate",
             Self::GroupYCoordinate => "GroupYCoordinate",
-            CastType::Plaintext(plaintext_type) => "Plaintext",
-            CastType::Record(identifier) => "Record",
-            CastType::ExternalRecord(locator) => "ExternalRecord",
+            CastType::Plaintext(_) => "Plaintext",
+            CastType::Record(_) => "Record",
+            CastType::ExternalRecord(_) => "ExternalRecord",
         };
 
         let j_value = match self {

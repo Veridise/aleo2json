@@ -108,7 +108,7 @@ enum ProgramDefinition {
 
 /// ** Vanguard JSON serialization helper ** ///
 impl ProgramDefinition {
-    pub fn to_json(&self) -> serde_json::Value {
+    pub fn to_json(self) -> serde_json::Value {
         let j_definition = match self {
             ProgramDefinition::Mapping => "Mapping",
             ProgramDefinition::Struct => "Struct",

@@ -43,12 +43,12 @@ pub enum ValueType<N: Network> {
 impl<N: Network> ValueType<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
-            Self::Constant(plaintext_type) => "Constant",
-            Self::Public(plaintext_type) => "Public",
-            Self::Private(plaintext_type) => "Private",
-            Self::Record(identifier) => "Record",
-            Self::ExternalRecord(locator) => "ExternalRecord",
-            Self::Future(locator) => "Future",
+            Self::Constant(_) => "Constant",
+            Self::Public(_) => "Public",
+            Self::Private(_) => "Private",
+            Self::Record(_) => "Record",
+            Self::ExternalRecord(_) => "ExternalRecord",
+            Self::Future(_) => "Future",
         };
 
         let j_value = match self {

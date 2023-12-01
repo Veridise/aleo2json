@@ -39,8 +39,8 @@ pub enum MappingLocator<N: Network> {
 impl<N: Network> MappingLocator<N> {
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
-            MappingLocator::Locator(locator) => "Locator",
-            MappingLocator::Resource(resource) => "Resource",
+            MappingLocator::Locator(_) => "Locator",
+            MappingLocator::Resource(_) => "Resource",
         };
 
         let j_value = match self {

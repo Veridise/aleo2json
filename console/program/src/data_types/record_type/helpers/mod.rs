@@ -25,7 +25,7 @@ pub enum PublicOrPrivate {
 
 impl PublicOrPrivate {
     /// ** Vanguard JSON serialization helper ** ///
-    pub fn to_json(&self) -> serde_json::Value {
+    pub fn to_json(self) -> serde_json::Value {
         json!(format!("{}", self))
     }
 

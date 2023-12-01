@@ -36,9 +36,9 @@ fn main() {
     let path = std::path::Path::new(&path);
 
     // read
-    let file_name = path.file_name().unwrap().to_str().unwrap();
-    let file = std::fs::File::open(&path).expect("Could not open file");
-    let rawp = std::fs::read_to_string(&path).expect("Read error");
+    // let file_name = path.file_name().unwrap().to_str().unwrap();
+    // let file = std::fs::File::open(&path).expect("Could not open file");
+    let rawp = std::fs::read_to_string(path).expect("Read error");
 
     // println!("Read:\n{rawp}");
 
