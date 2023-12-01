@@ -12,16 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use super::*;
+#![forbid(unsafe_code)]
 
-impl<N: Network, C: ConsensusStorage<N>> Ledger<N, C> {
-    /// Checks the given transaction is well-formed and unique.
-    pub fn check_transaction_basic<R: CryptoRng + Rng>(
-        &self,
-        transaction: &Transaction<N>,
-        rejected_id: Option<Field<N>>,
-        rng: &mut R,
-    ) -> Result<()> {
-        self.vm().check_transaction(transaction, rejected_id, rng)
+pub const GAUGE_NAMES: [&str; 1] = [committee::TOTAL_STAKE];
+
+pub mod committee {
+    pub const TOTAL_STAKE: &str = "snarkvm_ledger_committee_total_stake";
+}
+
+/// Registers all metrics.
+pub fn register_metrics() {
+    for name in GAUGE_NAMES {
+        ::metrics::register_gauge!(name);
     }
+}
+
+/// Updates a gauge with the given name to the given value.
+///
+/// Gauges represent a single value that can go up or down over time,
+/// and always starts out with an initial value of zero.
+pub fn gauge<V: Into<f64>>(name: &'static str, value: V) {
+    ::metrics::gauge!(name, value.into());
 }
