@@ -35,8 +35,8 @@ pub struct Mapping<N: Network> {
     value: MapValue<N>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> Mapping<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "Mapping",
@@ -45,7 +45,9 @@ impl<N: Network> Mapping<N> {
             "value": self.value.to_json(),
         })
     }
+}
 
+impl<N: Network> Mapping<N> {
     /// Initializes a new mapping with the given name, key statement, and value statement.
     pub fn new(name: Identifier<N>, key: MapKey<N>, value: MapValue<N>) -> Self {
         Self { name, key, value }

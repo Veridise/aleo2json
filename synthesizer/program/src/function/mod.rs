@@ -49,13 +49,8 @@ pub struct FunctionCore<N: Network, Instruction: InstructionTrait<N>, Command: C
     finalize_logic: Option<FinalizeCore<N, Command>>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> FunctionCore<N, Instruction, Command> {
-    /// Initializes a new function with the given name.
-    pub fn new(name: Identifier<N>) -> Self {
-        Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new(), finalize_logic: None }
-    }
-
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         let mut j_inputs: Vec<serde_json::Value> = Vec::new();
         for val in &self.inputs {
@@ -85,6 +80,13 @@ impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> Fun
             "outputs": j_outputs,
             "finalize_logic": j_finalize_logic,
         })
+    }
+}
+
+impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> FunctionCore<N, Instruction, Command> {
+    /// Initializes a new function with the given name.
+    pub fn new(name: Identifier<N>) -> Self {
+        Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new(), finalize_logic: None }
     }
 
     /// Returns the name of the function.

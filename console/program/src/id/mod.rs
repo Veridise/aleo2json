@@ -99,8 +99,8 @@ impl<N: Network> TryFrom<&str> for ProgramID<N> {
     }
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> ProgramID<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "ProgramID",
@@ -109,11 +109,12 @@ impl<N: Network> ProgramID<N> {
         })
     }
 
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_key(&self) -> String {
         format!("{}", self)
     }
+}
 
+impl<N: Network> ProgramID<N> {
     /// Returns the program name.
     #[inline]
     pub const fn name(&self) -> &Identifier<N> {

@@ -58,8 +58,8 @@ impl<N: Network> ArrayType<N> {
     }
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> ArrayType<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "ArrayType",
@@ -67,7 +67,9 @@ impl<N: Network> ArrayType<N> {
             "length": self.length,
         })
     }
+}
 
+impl<N: Network> ArrayType<N> {
     /// Returns the next element type.
     /// In the case of a one-dimensional array, this will return the element type of the array.
     /// In the case of a multi-dimensional array, this will return the element type of the **outermost** array.

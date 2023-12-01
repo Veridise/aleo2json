@@ -44,13 +44,8 @@ pub struct ClosureCore<N: Network, Instruction: InstructionTrait<N>> {
     outputs: IndexSet<Output<N>>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network, Instruction: InstructionTrait<N>> ClosureCore<N, Instruction> {
-    /// Initializes a new closure with the given name.
-    pub fn new(name: Identifier<N>) -> Self {
-        Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new() }
-    }
-
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         let mut j_inputs: Vec<serde_json::Value> = Vec::new();
         for val in &self.inputs {
@@ -74,6 +69,13 @@ impl<N: Network, Instruction: InstructionTrait<N>> ClosureCore<N, Instruction> {
             "instructions": j_instructions,
             "outputs": j_outputs,
         })
+    }
+}
+
+impl<N: Network, Instruction: InstructionTrait<N>> ClosureCore<N, Instruction> {
+    /// Initializes a new closure with the given name.
+    pub fn new(name: Identifier<N>) -> Self {
+        Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new() }
     }
 
     /// Returns the name of the closure.

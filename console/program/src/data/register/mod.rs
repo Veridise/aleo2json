@@ -30,8 +30,8 @@ pub enum Register<N: Network> {
     Access(u64, Vec<Access<N>>),
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> Register<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         let j_vtype = match self {
             // Prints the register, i.e. r0
@@ -59,7 +59,9 @@ impl<N: Network> Register<N> {
             "value": j_value,
         })
     }
+}
 
+impl<N: Network> Register<N> {
     /// Returns the locator of the register.
     #[inline]
     pub const fn locator(&self) -> u64 {

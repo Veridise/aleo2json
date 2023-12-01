@@ -32,8 +32,8 @@ pub struct StructType<N: Network> {
     members: IndexMap<Identifier<N>, PlaintextType<N>>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> StructType<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         let mut j_members: HashMap<String, serde_json::Value> = HashMap::new();
         for (key, val) in &self.members {
@@ -46,7 +46,9 @@ impl<N: Network> StructType<N> {
             "members": j_members,
         })
     }
+}
 
+impl<N: Network> StructType<N> {
     /// Returns the name of the struct type.
     #[inline]
     pub const fn name(&self) -> &Identifier<N> {

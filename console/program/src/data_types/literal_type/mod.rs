@@ -62,15 +62,17 @@ pub enum LiteralType {
     String,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl LiteralType {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "LiteralType",
             "name": self.type_name(),
         })
     }
+}
 
+impl LiteralType {
     /// Returns the literal type name.
     pub fn type_name(&self) -> &str {
         match self {

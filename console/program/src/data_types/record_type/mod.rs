@@ -41,8 +41,8 @@ pub struct RecordType<N: Network> {
     entries: IndexMap<Identifier<N>, EntryType<N>>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> RecordType<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         let mut j_entries: HashMap<String, serde_json::Value> = HashMap::new();
         for (key, val) in &self.entries {
@@ -56,7 +56,9 @@ impl<N: Network> RecordType<N> {
             "entries": j_entries,
         })
     }
+}
 
+impl<N: Network> RecordType<N> {
     /// Returns the name of the record type.
     pub const fn name(&self) -> &Identifier<N> {
         &self.name

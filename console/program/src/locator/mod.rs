@@ -32,8 +32,8 @@ pub struct Locator<N: Network> {
     resource: Identifier<N>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> Locator<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "Locator",
@@ -41,7 +41,9 @@ impl<N: Network> Locator<N> {
             "resource": self.resource.to_json(),
         })
     }
+}
 
+impl<N: Network> Locator<N> {
     /// Initializes a locator from a program ID and resource.
     pub const fn new(program_id: ProgramID<N>, resource: Identifier<N>) -> Self {
         Self { id: program_id, resource }

@@ -26,8 +26,8 @@ pub struct MapValue<N: Network> {
     plaintext_type: PlaintextType<N>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> MapValue<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "MapValue",
@@ -35,7 +35,9 @@ impl<N: Network> MapValue<N> {
             "visibility": "public", // CHECK: map value is always public
         })
     }
+}
 
+impl<N: Network> MapValue<N> {
     /// Returns the value plaintext type.
     #[inline]
     pub const fn plaintext_type(&self) -> &PlaintextType<N> {

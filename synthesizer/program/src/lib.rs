@@ -144,32 +144,8 @@ pub struct ProgramCore<N: Network, Instruction: InstructionTrait<N>, Command: Co
     functions: IndexMap<Identifier<N>, FunctionCore<N, Instruction, Command>>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> ProgramCore<N, Instruction, Command> {
-    /// Initializes an empty program.
-    #[inline]
-    pub fn new(id: ProgramID<N>) -> Result<Self> {
-        // Ensure the program name is valid.
-        ensure!(!Self::is_reserved_keyword(id.name()), "Program name is invalid: {}", id.name());
-
-        Ok(Self {
-            id,
-            imports: IndexMap::new(),
-            identifiers: IndexMap::new(),
-            mappings: IndexMap::new(),
-            structs: IndexMap::new(),
-            records: IndexMap::new(),
-            closures: IndexMap::new(),
-            functions: IndexMap::new(),
-        })
-    }
-
-    /// Initializes the credits program.
-    #[inline]
-    pub fn credits() -> Result<Self> {
-        Self::from_str(include_str!("./resources/credits.aleo"))
-    }
-
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         // collect imports
         let mut j_imports: HashMap<String, serde_json::Value> = HashMap::new();
@@ -224,6 +200,32 @@ impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> Pro
             "closures": j_closures,
             "functions": j_functions,
         })
+    }
+}
+
+impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> ProgramCore<N, Instruction, Command> {
+    /// Initializes an empty program.
+    #[inline]
+    pub fn new(id: ProgramID<N>) -> Result<Self> {
+        // Ensure the program name is valid.
+        ensure!(!Self::is_reserved_keyword(id.name()), "Program name is invalid: {}", id.name());
+
+        Ok(Self {
+            id,
+            imports: IndexMap::new(),
+            identifiers: IndexMap::new(),
+            mappings: IndexMap::new(),
+            structs: IndexMap::new(),
+            records: IndexMap::new(),
+            closures: IndexMap::new(),
+            functions: IndexMap::new(),
+        })
+    }
+
+    /// Initializes the credits program.
+    #[inline]
+    pub fn credits() -> Result<Self> {
+        Self::from_str(include_str!("./resources/credits.aleo"))
     }
 
     /// Returns the ID of the program.

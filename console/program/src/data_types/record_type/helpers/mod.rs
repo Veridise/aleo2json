@@ -23,12 +23,14 @@ pub enum PublicOrPrivate {
     Private,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl PublicOrPrivate {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(self) -> serde_json::Value {
         json!(format!("{}", self))
     }
+}
 
+impl PublicOrPrivate {
     /// Returns `true` if the entry is public.
     pub const fn is_public(&self) -> bool {
         matches!(self, PublicOrPrivate::Public)

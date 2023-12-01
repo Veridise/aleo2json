@@ -31,8 +31,8 @@ pub struct Output<N: Network> {
     register_type: RegisterType<N>,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
 impl<N: Network> Output<N> {
-    /// ** Vanguard JSON serialization helper ** ///
     pub fn to_json(&self) -> serde_json::Value {
         json!({
             "type": "Output",
@@ -41,7 +41,9 @@ impl<N: Network> Output<N> {
             "str": format!("{}", self),
         })
     }
+}
 
+impl<N: Network> Output<N> {
     /// Returns the output register.
     #[inline]
     pub const fn operand(&self) -> &Operand<N> {

@@ -19,10 +19,10 @@ use console::{
 };
 
 pub trait InstructionTrait<N: Network>: Clone + Parser + FromBytes + ToBytes {
+    /// ** Vanguard JSON serialization helper ** ///
+    fn to_json(&self) -> serde_json::Value;
     /// Returns the destination registers of the instruction.
     fn destinations(&self) -> Vec<Register<N>>;
     /// Returns `true` if the given name is a reserved opcode.
     fn is_reserved_opcode(name: &str) -> bool;
-    /// ** Vanguard JSON serialization helper ** ///
-    fn to_json(&self) -> serde_json::Value;
 }
