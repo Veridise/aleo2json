@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{
     traits::{RegistersLoad, RegistersStore, StackMatches, StackProgram},
     FinalizeRegistersState,
@@ -43,6 +45,23 @@ pub struct RandChaCha<N: Network> {
     destination: Register<N>,
     /// The destination register type.
     destination_type: LiteralType,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> RandChaCha<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_operands = Vec::new();
+        for val in &self.operands {
+            j_operands.push(val.to_json());
+        }
+
+        json!({
+            "type": "RandChaCha",
+            "operands": j_operands,
+            "destination": self.destination.to_json(),
+            "destination_type": self.destination_type.to_json(),
+        })
+    }
 }
 
 impl<N: Network> RandChaCha<N> {

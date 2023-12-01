@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -31,6 +33,15 @@ pub struct Locator<N: Network> {
 }
 
 impl<N: Network> Locator<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Locator",
+            "id": self.id.to_json(),
+            "resource": self.resource.to_json(),
+        })
+    }
+
     /// Initializes a locator from a program ID and resource.
     pub const fn new(program_id: ProgramID<N>, resource: Identifier<N>) -> Self {
         Self { id: program_id, resource }

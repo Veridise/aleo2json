@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -61,6 +63,14 @@ pub enum LiteralType {
 }
 
 impl LiteralType {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "LiteralType",
+            "name": self.type_name(),
+        })
+    }
+
     /// Returns the literal type name.
     pub fn type_name(&self) -> &str {
         match self {

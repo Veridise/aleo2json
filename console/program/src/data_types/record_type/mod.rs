@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+use std::collections::HashMap;
+
 mod entry_type;
 pub use entry_type::EntryType;
 
@@ -39,6 +42,21 @@ pub struct RecordType<N: Network> {
 }
 
 impl<N: Network> RecordType<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_entries: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.entries {
+            j_entries.insert(key.to_key(), val.to_json());
+        }
+
+        json!({
+            "type": "RecordType",
+            "name": self.name.to_json(),
+            "owner": self.owner.to_json(),
+            "entries": j_entries,
+        })
+    }
+
     /// Returns the name of the record type.
     pub const fn name(&self) -> &Identifier<N> {
         &self.name

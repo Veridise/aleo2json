@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod input;
 use input::*;
 
@@ -46,6 +48,32 @@ impl<N: Network, Instruction: InstructionTrait<N>> ClosureCore<N, Instruction> {
     /// Initializes a new closure with the given name.
     pub fn new(name: Identifier<N>) -> Self {
         Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new() }
+    }
+
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_inputs: Vec<serde_json::Value> = Vec::new();
+        for val in &self.inputs {
+            j_inputs.push(val.to_json());
+        }
+
+        let mut j_instructions = Vec::new();
+        for val in &self.instructions {
+            j_instructions.push(val.to_json());
+        }
+
+        let mut j_outputs = Vec::new();
+        for val in &self.outputs {
+            j_outputs.push(val.to_json());
+        }
+
+        json!({
+            "type": "ClosureCore",
+            "name": self.name.to_json(),
+            "inputs": j_inputs,
+            "instructions": j_instructions,
+            "outputs": j_outputs,
+        })
     }
 
     /// Returns the name of the closure.

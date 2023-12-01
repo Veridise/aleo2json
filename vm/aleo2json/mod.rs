@@ -12,19 +12,5 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-use serde_json::json;
-
-use console::{
-    network::Network,
-    prelude::{FromBytes, Parser, ToBytes},
-    program::Register,
-};
-
-pub trait InstructionTrait<N: Network>: Clone + Parser + FromBytes + ToBytes {
-    /// Returns the destination registers of the instruction.
-    fn destinations(&self) -> Vec<Register<N>>;
-    /// Returns `true` if the given name is a reserved opcode.
-    fn is_reserved_opcode(name: &str) -> bool;
-    /// ** Vanguard JSON serialization helper ** ///
-    fn to_json(&self) -> serde_json::Value;
-}
+pub mod aleo2json;
+pub use aleo2json::*;

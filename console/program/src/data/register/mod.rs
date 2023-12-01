@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -29,6 +31,35 @@ pub enum Register<N: Network> {
 }
 
 impl<N: Network> Register<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            // Prints the register, i.e. r0
+            Self::Locator(locator) => "Locator",
+            // Prints the register access, i.e. r0.owner
+            Self::Access(locator, accesses) => "Access",
+        };
+
+        let j_value = match self {
+            // Prints the register, i.e. r0
+            Self::Locator(locator) => json!(locator),
+            // Prints the register access, i.e. r0.owner
+            Self::Access(locator, accesses) => {
+                let mut j_access = Vec::new();
+                for val in accesses {
+                    j_access.push(val.to_json());
+                }
+                json!(j_access)
+            }
+        };
+
+        json!({
+            "type": "Register",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
+
     /// Returns the locator of the register.
     #[inline]
     pub const fn locator(&self) -> u64 {

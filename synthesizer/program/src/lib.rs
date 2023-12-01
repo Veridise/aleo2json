@@ -16,6 +16,9 @@
 #![allow(clippy::too_many_arguments)]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+use std::collections::HashMap;
+
 pub type Program<N> = crate::ProgramCore<N, Instruction<N>, Command<N>>;
 pub type Function<N> = crate::FunctionCore<N, Instruction<N>, Command<N>>;
 pub type Finalize<N> = crate::FinalizeCore<N, Command<N>>;
@@ -103,6 +106,24 @@ enum ProgramDefinition {
     Function,
 }
 
+/// ** Vanguard JSON serialization helper ** ///
+impl ProgramDefinition {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_definition = match self {
+            ProgramDefinition::Mapping => "Mapping",
+            ProgramDefinition::Struct => "Struct",
+            ProgramDefinition::Record => "Record",
+            ProgramDefinition::Closure => "Closure",
+            ProgramDefinition::Function => "Function",
+        };
+
+        json!({
+            "type": "ProgramDefinition",
+            "definition": j_definition,
+        })
+    }
+}
+
 #[derive(Clone, PartialEq, Eq)]
 pub struct ProgramCore<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> {
     /// The ID of the program.
@@ -146,6 +167,63 @@ impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> Pro
     #[inline]
     pub fn credits() -> Result<Self> {
         Self::from_str(include_str!("./resources/credits.aleo"))
+    }
+
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        // collect imports
+        let mut j_imports: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.imports {
+            j_imports.insert(key.to_key(), val.to_json());
+        }
+
+        // collect identifiers
+        let mut j_identifiers: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.identifiers {
+            j_identifiers.insert(key.to_key(), val.to_json());
+        }
+
+        // collect mappings
+        let mut j_mappings: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.mappings {
+            j_mappings.insert(key.to_key(), val.to_json());
+        }
+
+        // collect structs
+        let mut j_structs: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.structs {
+            j_structs.insert(key.to_key(), val.to_json());
+        }
+
+        // collect records
+        let mut j_records: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.records {
+            j_records.insert(key.to_key(), val.to_json());
+        }
+
+        // collect closures
+        let mut j_closures: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.records {
+            j_closures.insert(key.to_key(), val.to_json());
+        }
+
+        // collect functions
+        let mut j_functions: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.functions {
+            j_functions.insert(key.to_key(), val.to_json());
+        }
+
+        json!({
+            "type": "ProgramCore",
+            "id": self.id.to_json(),
+            "identifiers": j_identifiers,
+            "imports": j_imports,
+            "mappings": j_mappings,
+            "structs": j_structs,
+            "records": j_records,
+            "closures": j_closures,
+            "functions": j_functions,
+        })
     }
 
     /// Returns the ID of the program.

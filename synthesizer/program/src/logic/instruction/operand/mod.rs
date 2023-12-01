@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 
@@ -40,6 +42,47 @@ pub enum Operand<N: Network> {
     /// The operand is the block height.
     /// Note: This variant is only accessible in the `finalize` scope.
     BlockHeight,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Operand<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            // Prints the literal, i.e. 10field.private
+            Self::Literal(literal) => "Literal",
+            // Prints the register, i.e. r0 or r0.owner
+            Self::Register(register) => "Register",
+            // Prints the program ID, i.e. howard.aleo
+            Self::ProgramID(program_id) => "ProgramID",
+            // Prints the identifier for the signer, i.e. self.signer
+            Self::Signer => "Signer",
+            // Prints the identifier for the caller, i.e. self.caller
+            Self::Caller => "Caller",
+            // Prints the identifier for the block height, i.e. block.height
+            Self::BlockHeight => "BlockHeight",
+        };
+
+        let j_value = match self {
+            // Prints the literal, i.e. 10field.private
+            Self::Literal(literal) => literal.to_json(),
+            // Prints the register, i.e. r0 or r0.owner
+            Self::Register(register) => register.to_json(),
+            // Prints the program ID, i.e. howard.aleo
+            Self::ProgramID(program_id) => program_id.to_json(),
+            // Prints the identifier for the signer, i.e. self.signer
+            Self::Signer => serde_json::Value::Null,
+            // Prints the identifier for the caller, i.e. self.caller
+            Self::Caller => serde_json::Value::Null,
+            // Prints the identifier for the block height, i.e. block.height
+            Self::BlockHeight => serde_json::Value::Null,
+        };
+
+        json!({
+            "type": "Operand",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> From<Literal<N>> for Operand<N> {

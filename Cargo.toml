@@ -94,6 +94,11 @@ name = "snarkvm"
 path = "vm/cli/main.rs"
 required-features = [ "cli" ]
 
+[[bin]]
+name = "aleo2json"
+path = "vm/aleo2json/main.rs"
+required-features = [ "cli" ]
+
 [features]
 default = [
   "circuit",

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{
     traits::{FinalizeStoreTrait, RegistersLoad, StackMatches, StackProgram},
     FinalizeOperation,
@@ -33,6 +35,18 @@ pub struct Set<N: Network> {
     key: Operand<N>,
     /// The value to be set.
     value: Operand<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Set<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Set",
+            "mapping": self.mapping.to_json(),
+            "key": self.key.to_json(),
+            "value": self.value.to_json(),
+        })
+    }
 }
 
 impl<N: Network> Set<N> {

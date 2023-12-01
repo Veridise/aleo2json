@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{Opcode, Operand};
 use console::{network::prelude::*, program::Identifier};
 
@@ -34,6 +36,18 @@ pub struct Branch<N: Network, const VARIANT: u8> {
     second: Operand<N>,
     /// The position.
     position: Identifier<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network, const VARIANT: u8> Branch<N, VARIANT> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Branch",
+            "first": self.first.to_json(),
+            "second": self.second.to_json(),
+            "position": self.position.to_json(),
+        })
+    }
 }
 
 impl<N: Network, const VARIANT: u8> Branch<N, VARIANT> {

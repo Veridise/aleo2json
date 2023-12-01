@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{
     traits::{FinalizeStoreTrait, RegistersLoad, RegistersStore, StackMatches, StackProgram},
     Opcode,
@@ -31,6 +33,27 @@ pub enum MappingLocator<N: Network> {
     Locator(Locator<N>),
     /// The reference to a local mapping name.
     Resource(Identifier<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> MappingLocator<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            MappingLocator::Locator(locator) => "Locator",
+            MappingLocator::Resource(resource) => "Resource",
+        };
+
+        let j_value = match self {
+            MappingLocator::Locator(locator) => locator.to_json(),
+            MappingLocator::Resource(resource) => resource.to_json(),
+        };
+
+        json!({
+            "type": "MappingLocator",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> Parser for MappingLocator<N> {
@@ -134,6 +157,18 @@ pub struct Get<N: Network> {
     key: Operand<N>,
     /// The destination register.
     destination: Register<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Get<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Get",
+            "mapping": self.mapping.to_json(),
+            "key": self.key.to_json(),
+            "destination": self.destination.to_json(),
+        })
+    }
 }
 
 impl<N: Network> PartialEq for Get<N> {

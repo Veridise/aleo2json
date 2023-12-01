@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 
@@ -29,6 +31,14 @@ pub struct Import<N: Network> {
 }
 
 impl<N: Network> Import<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Import",
+            "program_id": self.program_id.to_json(),
+        })
+    }
+
     /// Returns the imported program ID.
     #[inline]
     pub const fn program_id(&self) -> &ProgramID<N> {

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{
     traits::{FinalizeStoreTrait, RegistersLoad, StackMatches, StackProgram},
     FinalizeOperation,
@@ -28,6 +30,17 @@ pub struct Remove<N: Network> {
     mapping: Identifier<N>,
     /// The key to access the mapping.
     key: Operand<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Remove<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Remove",
+            "mapping": self.mapping.to_json(),
+            "key": self.key.to_json(),
+        })
+    }
 }
 
 impl<N: Network> Remove<N> {

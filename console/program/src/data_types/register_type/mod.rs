@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -31,6 +33,39 @@ pub enum RegisterType<N: Network> {
     ExternalRecord(Locator<N>),
     /// A future.
     Future(Locator<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> RegisterType<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            // Prints the plaintext type, i.e. signature
+            Self::Plaintext(plaintext_type) => "Plaintext",
+            // Prints the record name, i.e. token.record
+            Self::Record(record_name) => "Record",
+            // Prints the locator, i.e. token.aleo/token.record
+            Self::ExternalRecord(locator) => "ExternalRecord",
+            // Prints the future type, i.e. future
+            Self::Future(locator) => "Future",
+        };
+
+        let j_value = match self {
+            // Prints the plaintext type, i.e. signature
+            Self::Plaintext(plaintext_type) => plaintext_type.to_json(),
+            // Prints the record name, i.e. token.record
+            Self::Record(record_name) => record_name.to_json(),
+            // Prints the locator, i.e. token.aleo/token.record
+            Self::ExternalRecord(locator) => locator.to_json(),
+            // Prints the future type, i.e. future
+            Self::Future(locator) => locator.to_json(),
+        };
+
+        json!({
+            "type": "RegisterType",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> From<ValueType<N>> for RegisterType<N> {

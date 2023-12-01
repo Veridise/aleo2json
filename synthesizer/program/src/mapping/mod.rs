@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod key;
 use key::*;
 
@@ -34,6 +36,16 @@ pub struct Mapping<N: Network> {
 }
 
 impl<N: Network> Mapping<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Mapping",
+            "name": self.name.to_json(),
+            "key": self.key.to_json(),
+            "value": self.value.to_json(),
+        })
+    }
+
     /// Initializes a new mapping with the given name, key statement, and value statement.
     pub fn new(name: Identifier<N>, key: MapKey<N>, value: MapValue<N>) -> Self {
         Self { name, key, value }

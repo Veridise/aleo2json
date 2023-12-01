@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 
@@ -30,6 +32,16 @@ pub struct Output<N: Network> {
 }
 
 impl<N: Network> Output<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Output",
+            "operand": self.operand.to_json(),
+            "register_type": self.register_type.to_json(),
+            "str": format!("{}", self),
+        })
+    }
+
     /// Returns the output register.
     #[inline]
     pub const fn operand(&self) -> &Operand<N> {

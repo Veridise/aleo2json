@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -26,6 +28,31 @@ pub enum Access<N: Network> {
     Member(Identifier<N>),
     /// Access an element of an array.
     Index(U32<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Access<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            // Prints the access member, i.e. `.foo`
+            Self::Member(identifier) => "Member",
+            // Prints the access index, i.e. `[0u32]`
+            Self::Index(index) => "Index",
+        };
+
+        let j_value = match self {
+            // Prints the access member, i.e. `.foo`
+            Self::Member(identifier) => identifier.to_json(),
+            // Prints the access index, i.e. `[0u32]`
+            Self::Index(index) => json!(index),
+        };
+
+        json!({
+            "type": "Access",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> From<Identifier<N>> for Access<N> {

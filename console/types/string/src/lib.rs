@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod bitwise;
 mod bytes;
 mod parse;
@@ -34,6 +36,16 @@ pub struct StringType<E: Environment> {
     string: String,
     /// PhantomData
     _phantom: PhantomData<E>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> StringType<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "StringType",
+            "string": self.string,
+        })
+    }
 }
 
 impl<E: Environment> StringTrait for StringType<E> {}

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod input;
 use input::*;
 
@@ -40,6 +42,35 @@ pub struct FinalizeCore<N: Network, Command: CommandTrait<N>> {
     num_writes: u16,
     /// A mapping from `Position`s to their index in `commands`.
     positions: HashMap<Identifier<N>, usize>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network, Command: CommandTrait<N>> FinalizeCore<N, Command> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_inputs = Vec::new();
+        for val in &self.inputs {
+            j_inputs.push(val.to_json());
+        }
+
+        let mut j_commands = Vec::new();
+        for val in &self.commands {
+            j_commands.push(val.to_json());
+        }
+
+        let mut j_positions: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.positions {
+            j_positions.insert(key.to_key(), json!(val));
+        }
+
+        json!({
+            "type": "FinalizeCore",
+            "name": self.name.to_json(),
+            "inputs": j_inputs,
+            "commands": j_commands,
+            "num_writes": self.num_writes,
+            "positions": j_positions,
+        })
+    }
 }
 
 impl<N: Network, Command: CommandTrait<N>> FinalizeCore<N, Command> {

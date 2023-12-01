@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 pub use cast::Cast;
 pub use cast_lossy::CastLossy;
 
@@ -70,4 +72,55 @@ pub enum Literal<N: Network> {
     Signature(Box<Signature<N>>),
     /// The string type.
     String(StringType<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Literal<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            Self::Address(literal) => "Address",
+            Self::Boolean(literal) => "Boolean",
+            Self::Field(literal) => "Field",
+            Self::Group(literal) => "Group",
+            Self::I8(literal) => "I8",
+            Self::I16(literal) => "I16",
+            Self::I32(literal) => "I32",
+            Self::I64(literal) => "I64",
+            Self::I128(literal) => "I128",
+            Self::U8(literal) => "U8",
+            Self::U16(literal) => "U16",
+            Self::U32(literal) => "U32",
+            Self::U64(literal) => "U64",
+            Self::U128(literal) => "U128",
+            Self::Scalar(literal) => "Scalar",
+            Self::Signature(literal) => "Signature",
+            Self::String(literal) => "String",
+        };
+
+        let j_value = match self {
+            Self::Address(literal) => literal.to_json(),
+            Self::Boolean(literal) => literal.to_json(),
+            Self::Field(literal) => literal.to_json(),
+            Self::Group(literal) => literal.to_json(),
+            Self::I8(literal) => literal.to_json(),
+            Self::I16(literal) => literal.to_json(),
+            Self::I32(literal) => literal.to_json(),
+            Self::I64(literal) => literal.to_json(),
+            Self::I128(literal) => literal.to_json(),
+            Self::U8(literal) => literal.to_json(),
+            Self::U16(literal) => literal.to_json(),
+            Self::U32(literal) => literal.to_json(),
+            Self::U64(literal) => literal.to_json(),
+            Self::U128(literal) => literal.to_json(),
+            Self::Scalar(literal) => literal.to_json(),
+            Self::Signature(literal) => literal.to_json(),
+            Self::String(literal) => literal.to_json(),
+        };
+
+        json!({
+            "type": "Literal",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }

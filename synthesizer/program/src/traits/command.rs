@@ -19,6 +19,8 @@ use console::{
 };
 
 pub trait CommandTrait<N: Network>: Clone + Parser + FromBytes + ToBytes {
+    /// ** Vanguard JSON serialization helper ** ///
+    fn to_json(&self) -> serde_json::Value;
     /// Returns the destination registers of the command.
     fn destinations(&self) -> Vec<Register<N>>;
     /// Returns the branch target, if the command is a branch command.

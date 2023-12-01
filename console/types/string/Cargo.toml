@@ -6,6 +6,9 @@ description = "Type operations for a decentralized virtual machine"
 license = "Apache-2.0"
 edition = "2021"
 
+[dependencies]
+serde_json = "1.0.108"
+
 [dependencies.snarkvm-console-network-environment]
 path = "../../network/environment"
 version = "=0.16.9"

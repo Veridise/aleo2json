@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+use std::collections::HashMap;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -30,6 +33,20 @@ pub struct StructType<N: Network> {
 }
 
 impl<N: Network> StructType<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_members: HashMap<String, serde_json::Value> = HashMap::new();
+        for (key, val) in &self.members {
+            j_members.insert(key.to_key(), val.to_json());
+        }
+
+        json!({
+            "type": "StructType",
+            "name": self.name.to_json(),
+            "members": j_members,
+        })
+    }
+
     /// Returns the name of the struct type.
     #[inline]
     pub const fn name(&self) -> &Identifier<N> {

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod input;
 use input::*;
 
@@ -51,6 +53,38 @@ impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> Fun
     /// Initializes a new function with the given name.
     pub fn new(name: Identifier<N>) -> Self {
         Self { name, inputs: IndexSet::new(), instructions: Vec::new(), outputs: IndexSet::new(), finalize_logic: None }
+    }
+
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        let mut j_inputs: Vec<serde_json::Value> = Vec::new();
+        for val in &self.inputs {
+            j_inputs.push(val.to_json());
+        }
+
+        let mut j_instructions = Vec::new();
+        for val in &self.instructions {
+            j_instructions.push(val.to_json());
+        }
+
+        let mut j_outputs = Vec::new();
+        for val in &self.outputs {
+            j_outputs.push(val.to_json());
+        }
+
+        let j_finalize_logic = match &self.finalize_logic {
+            Some(v) => v.to_json(),
+            None => serde_json::Value::Null,
+        };
+
+        json!({
+            "type": "FunctionCore",
+            "name": self.name.to_json(),
+            "inputs": j_inputs,
+            "instructions": j_instructions,
+            "outputs": j_outputs,
+            "finalize_logic": j_finalize_logic,
+        })
     }
 
     /// Returns the name of the function.

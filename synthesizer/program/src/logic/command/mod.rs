@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod await_;
 pub use await_::*;
 
@@ -87,6 +89,43 @@ pub enum Command<N: Network> {
 }
 
 impl<N: Network> CommandTrait<N> for Command<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            Self::Instruction(instruction) => "Instruction",
+            Self::Await(await_) => "Await",
+            Self::Contains(contains) => "Contains",
+            Self::Get(get) => "Get",
+            Self::GetOrUse(get_or_use) => "GetOrUse",
+            Self::RandChaCha(rand_chacha) => "RandChaCha",
+            Self::Remove(remove) => "Remove",
+            Self::Set(set) => "Set",
+            Self::BranchEq(branch_eq) => "BranchEq",
+            Self::BranchNeq(branch_neq) => "BranchNeq",
+            Self::Position(position) => "Position",
+        };
+
+        let j_value = match self {
+            Self::Instruction(instruction) => instruction.to_json(),
+            Self::Await(await_) => await_.to_json(),
+            Self::Contains(contains) => contains.to_json(),
+            Self::Get(get) => get.to_json(),
+            Self::GetOrUse(get_or_use) => get_or_use.to_json(),
+            Self::RandChaCha(rand_chacha) => rand_chacha.to_json(),
+            Self::Remove(remove) => remove.to_json(),
+            Self::Set(set) => set.to_json(),
+            Self::BranchEq(branch_eq) => branch_eq.to_json(),
+            Self::BranchNeq(branch_neq) => branch_neq.to_json(),
+            Self::Position(position) => position.to_json(),
+        };
+
+        json!({
+            "type": "Command",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
+
     /// Returns the destination registers of the command.
     #[inline]
     fn destinations(&self) -> Vec<Register<N>> {

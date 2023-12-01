@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -98,6 +100,20 @@ impl<N: Network> TryFrom<&str> for ProgramID<N> {
 }
 
 impl<N: Network> ProgramID<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "ProgramID",
+            "name": self.name.to_json(),
+            "network": self.network.to_json(),
+        })
+    }
+
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_key(&self) -> String {
+        format!("{}", self)
+    }
+
     /// Returns the program name.
     #[inline]
     pub const fn name(&self) -> &Identifier<N> {

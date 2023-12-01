@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -32,6 +34,11 @@ pub enum EntryType<N: Network> {
 }
 
 impl<N: Network> EntryType<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!(format!("{}", self))
+    }
+
     /// Returns the plaintext type.
     pub const fn plaintext_type(&self) -> &PlaintextType<N> {
         match self {

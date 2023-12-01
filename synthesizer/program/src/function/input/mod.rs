@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 
@@ -31,6 +33,16 @@ pub struct Input<N: Network> {
 }
 
 impl<N: Network> Input<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Input",
+            "register": self.register.to_json(),
+            "value_type": self.value_type.to_json(),
+            "str": format!("{}", self),
+        })
+    }
+
     /// Returns the input register.
     #[inline]
     pub const fn register(&self) -> &Register<N> {

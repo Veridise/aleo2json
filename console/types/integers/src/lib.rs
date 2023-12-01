@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod arithmetic;
 mod bitwise;
 mod bytes;
@@ -62,6 +64,17 @@ pub struct Integer<E: Environment, I: IntegerType> {
     integer: I,
     /// PhantomData.
     _phantom: PhantomData<E>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment, I: IntegerType> Integer<E, I> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Integer",
+            "vtype": I::type_name(), // FIXME
+            "integer": format!("{}", self.integer), // FIXME
+        })
+    }
 }
 
 impl<E: Environment, I: IntegerType> IntegerTrait<I, U8<E>, U16<E>, U32<E>> for Integer<E, I> {}

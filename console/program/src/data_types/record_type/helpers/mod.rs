@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use snarkvm_console_network::prelude::*;
 
 /// A helper enum for the visibility of an entry.
@@ -22,6 +24,11 @@ pub enum PublicOrPrivate {
 }
 
 impl PublicOrPrivate {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!(format!("{}", self))
+    }
+
     /// Returns `true` if the entry is public.
     pub const fn is_public(&self) -> bool {
         matches!(self, PublicOrPrivate::Public)

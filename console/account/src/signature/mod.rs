@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bitwise;
 mod bytes;
 mod from_bits;
@@ -42,6 +44,18 @@ pub struct Signature<N: Network> {
     response: Scalar<N>,
     /// The compute key of the prover.
     compute_key: ComputeKey<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Signature<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Signature",
+            "challenge": self.challenge.to_json(),
+            "response": self.response.to_json(),
+            "compute_key": self.compute_key.to_json(),
+        })
+    }
 }
 
 impl<N: Network> From<(Scalar<N>, Scalar<N>, ComputeKey<N>)> for Signature<N> {

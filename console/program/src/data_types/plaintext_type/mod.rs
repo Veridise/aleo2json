@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -31,6 +33,35 @@ pub enum PlaintextType<N: Network> {
     /// An array type contains its element type and length.
     /// The format of the type is `[<element_type>; <length>]`.
     Array(ArrayType<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> PlaintextType<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            // Prints the literal, i.e. field
+            Self::Literal(literal) => "Literal",
+            // Prints the struct, i.e. signature
+            Self::Struct(struct_) => "Struct",
+            // Prints the array type, i.e. [field; 2u32]
+            Self::Array(array) => "Array",
+        };
+
+        let j_value = match self {
+            // Prints the literal, i.e. field
+            Self::Literal(literal) => literal.to_json(),
+            // Prints the struct, i.e. signature
+            Self::Struct(struct_) => struct_.to_json(),
+            // Prints the array type, i.e. [field; 2u32]
+            Self::Array(array) => array.to_json(),
+        };
+
+        json!({
+            "type": "PlaintextType",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> From<LiteralType> for PlaintextType<N> {

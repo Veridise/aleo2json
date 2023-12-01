@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod arithmetic;
 mod bitwise;
 mod bytes;
@@ -45,6 +47,16 @@ pub use snarkvm_console_types_scalar::Scalar;
 pub struct Group<E: Environment> {
     /// The underlying group element.
     group: E::Projective,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> Group<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Group",
+            "group": self.group.to_affine().to_x_coordinate(),
+        })
+    }
 }
 
 impl<E: Environment> GroupTrait<Scalar<E>> for Group<E> {}

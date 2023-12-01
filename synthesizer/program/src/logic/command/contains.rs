@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::{
     traits::{FinalizeStoreTrait, RegistersLoad, RegistersStore, StackMatches, StackProgram},
     Opcode,
@@ -33,6 +35,18 @@ pub struct Contains<N: Network> {
     key: Operand<N>,
     /// The destination register.
     destination: Register<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Contains<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Contains",
+            "mapping": self.mapping.to_json(),
+            "key": self.key.to_json(),
+            "destination": self.destination.to_json(),
+        })
+    }
 }
 
 impl<N: Network> Contains<N> {

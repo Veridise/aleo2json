@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod arithmetic;
 mod bitwise;
 mod bytes;
@@ -38,6 +40,16 @@ use zeroize::Zeroize;
 pub struct Field<E: Environment> {
     /// The underlying field element.
     field: E::Field,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> Field<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Field",
+            "field": self.field,
+        })
+    }
 }
 
 impl<E: Environment> FieldTrait for Field<E> {}

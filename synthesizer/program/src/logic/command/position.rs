@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 use crate::Opcode;
 use console::{network::prelude::*, program::Identifier};
 
@@ -21,6 +23,16 @@ use console::{network::prelude::*, program::Identifier};
 pub struct Position<N: Network> {
     /// The name to reference when branching to this position.
     name: Identifier<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Position<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Position",
+            "name": self.name.to_json(),
+        })
+    }
 }
 
 impl<N: Network> Position<N> {

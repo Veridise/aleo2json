@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod bitwise;
 mod bytes;
 mod from_bits;
@@ -39,6 +41,16 @@ pub use snarkvm_console_types_group::Group;
 pub struct Address<E: Environment> {
     /// The underlying address.
     address: Group<E>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> Address<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Address",
+            "address": self.address.to_json(),
+        })
+    }
 }
 
 impl<E: Environment> AddressTrait for Address<E> {}

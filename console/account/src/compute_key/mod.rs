@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bitwise;
 mod bytes;
 mod from_bits;
@@ -38,6 +40,18 @@ pub struct ComputeKey<N: Network> {
     pr_sig: Group<N>,
     /// The PRF secret key `sk_prf` := HashToScalar(pk_sig || pr_sig).
     sk_prf: Scalar<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> ComputeKey<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "ComputeKey",
+            "pk_sig": self.pk_sig.to_json(),
+            "pr_sig": self.pr_sig.to_json(),
+            "sk_prf": self.sk_prf.to_json(),
+        })
+    }
 }
 
 impl<N: Network> ComputeKey<N> {

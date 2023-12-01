@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod equal;
 mod from_bits;
@@ -36,6 +38,17 @@ use snarkvm_console_types::{prelude::*, Field};
 /// The identifier must fit within the data capacity of a base field element.
 #[derive(Copy, Clone)]
 pub struct Identifier<N: Network>(Field<N>, u8); // Number of bytes in the identifier.
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Identifier<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!(format!("{}", self))
+    }
+
+    pub fn to_key(&self) -> String {
+        format!("{}", self)
+    }
+}
 
 impl<N: Network> From<&Identifier<N>> for Identifier<N> {
     /// Returns a copy of the identifier.

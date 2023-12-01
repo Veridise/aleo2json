@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod bitwise;
 mod bytes;
 mod from_bits;
@@ -35,6 +37,16 @@ pub struct Boolean<E: Environment> {
     boolean: bool,
     /// PhantomData.
     _phantom: PhantomData<E>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> Boolean<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Boolean",
+            "boolean": self.boolean,
+        })
+    }
 }
 
 impl<E: Environment> BooleanTrait for Boolean<E> {}

@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 mod serialize;
@@ -35,6 +37,35 @@ pub enum ValueType<N: Network> {
     ExternalRecord(Locator<N>),
     /// A publicly-visible future.
     Future(Locator<N>),
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> ValueType<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        let j_vtype = match self {
+            Self::Constant(plaintext_type) => "Constant",
+            Self::Public(plaintext_type) => "Public",
+            Self::Private(plaintext_type) => "Private",
+            Self::Record(identifier) => "Record",
+            Self::ExternalRecord(locator) => "ExternalRecord",
+            Self::Future(locator) => "Future",
+        };
+
+        let j_value = match self {
+            Self::Constant(plaintext_type) => plaintext_type.to_json(),
+            Self::Public(plaintext_type) => plaintext_type.to_json(),
+            Self::Private(plaintext_type) => plaintext_type.to_json(),
+            Self::Record(identifier) => identifier.to_json(),
+            Self::ExternalRecord(locator) => locator.to_json(),
+            Self::Future(locator) => locator.to_json(),
+        };
+
+        json!({
+            "type": "ValueType",
+            "vtype": j_vtype,
+            "value": j_value,
+        })
+    }
 }
 
 impl<N: Network> From<EntryType<N>> for ValueType<N> {

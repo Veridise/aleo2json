@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 pub(crate) mod serialize;
@@ -57,6 +59,15 @@ impl<N: Network> ArrayType<N> {
 }
 
 impl<N: Network> ArrayType<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "ArrayType",
+            "element_type": self.element_type.to_json(),
+            "length": self.length,
+        })
+    }
+
     /// Returns the next element type.
     /// In the case of a one-dimensional array, this will return the element type of the array.
     /// In the case of a multi-dimensional array, this will return the element type of the **outermost** array.

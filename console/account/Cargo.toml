@@ -6,6 +6,9 @@ description = "Account operations for a decentralized virtual machine"
 license = "Apache-2.0"
 edition = "2021"
 
+[dependencies]
+serde_json = "1.0.108"
+
 [[bench]]
 name = "account"
 path = "benches/account.rs"

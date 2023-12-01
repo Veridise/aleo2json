@@ -11,6 +11,7 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
+use serde_json::json;
 
 use crate::Opcode;
 use console::{network::prelude::*, program::Register};
@@ -22,6 +23,16 @@ use console::{network::prelude::*, program::Register};
 pub struct Await<N: Network> {
     /// The register containing the future.
     register: Register<N>,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<N: Network> Await<N> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Await",
+            "register": self.register.to_json(),
+        })
+    }
 }
 
 impl<N: Network> Await<N> {

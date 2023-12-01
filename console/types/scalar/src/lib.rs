@@ -15,6 +15,8 @@
 #![cfg_attr(test, allow(clippy::assertions_on_result_states))]
 #![warn(clippy::cast_possible_truncation)]
 
+use serde_json::json;
+
 mod arithmetic;
 mod bitwise;
 mod bytes;
@@ -42,6 +44,16 @@ use zeroize::Zeroize;
 pub struct Scalar<E: Environment> {
     /// The underlying scalar element.
     scalar: E::Scalar,
+}
+
+/// ** Vanguard JSON serialization helper ** ///
+impl<E: Environment> Scalar<E> {
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "Scalar",
+            "scalar": self.scalar,
+        })
+    }
 }
 
 impl<E: Environment> ScalarTrait for Scalar<E> {}

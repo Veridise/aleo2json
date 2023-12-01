@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+use serde_json::json;
+
 mod bytes;
 mod parse;
 
@@ -25,6 +27,14 @@ pub struct MapKey<N: Network> {
 }
 
 impl<N: Network> MapKey<N> {
+    /// ** Vanguard JSON serialization helper ** ///
+    pub fn to_json(&self) -> serde_json::Value {
+        json!({
+            "type": "MapKey",
+            "plaintext_type": self.plaintext_type.to_json(),
+        })
+    }
+
     /// Returns the key plaintext type.
     #[inline]
     pub const fn plaintext_type(&self) -> &PlaintextType<N> {
