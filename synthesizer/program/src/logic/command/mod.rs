@@ -123,6 +123,7 @@ impl<N: Network> CommandTrait<N> for Command<N> {
             "type": "Command",
             "vtype": j_vtype,
             "value": j_value,
+            "str": format!("{}", self),
         })
     }
 
