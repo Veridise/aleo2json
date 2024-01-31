@@ -179,7 +179,7 @@ impl<N: Network, Instruction: InstructionTrait<N>, Command: CommandTrait<N>> Pro
 
         // collect closures
         let mut j_closures: HashMap<String, serde_json::Value> = HashMap::new();
-        for (key, val) in &self.records {
+        for (key, val) in &self.closures {
             j_closures.insert(key.to_key(), val.to_json());
         }
 
